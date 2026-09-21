@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Datasets (downloaded separately; see datasets/README.md)
+datasets/*
+!datasets/README.md
+
+# Run-time outputs: Trainer checkpoints, metrics.json, predictions
+src/outputs/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
