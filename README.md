@@ -1,8 +1,8 @@
 # BlinkVideoMAE
 
-**Token-Level Temporal Difference Modeling for In-the-Wild Eye Blink Detection**
-
-Abdelhakim Chergui, Belkacem Hedadi, Salah Eddine Bekhouche, Azeddine Benlamoudi
+<p align="center"> <strong>BlinkVideoMAE: Token-Level Temporal Difference Modeling for In-the-Wild Eye Blink Detection</strong> </p>
+<p align="center"> <strong>Abdelhakim Chergui</strong> · <strong>Belkacem Hedadi</strong> · <strong>Salah Eddine Bekhouche</strong> · <strong>Azeddine Benlamoudi</strong> </p>
+<p align="center"> <em>Manuscript under submission.</em> </p>
 
 BlinkVideoMAE fine-tunes a Kinetics-pretrained VideoMAE-Base backbone end-to-end and adds a compact
 **Temporal Difference Module (TDM)**. TDM projects the residual between adjacent, spatially pooled
@@ -15,71 +15,28 @@ open–closed–open trajectory of a blink, without optical flow. The model is e
   <img src="assets/blinkvideomae_architecture.png" alt="BlinkVideoMAE architecture" width="900">
 </p>
 
-*Figure 3 of the paper. A Kinetics-pretrained VideoMAE encodes 16 frames; spatial average pooling yields
+*A Kinetics-pretrained VideoMAE encodes 16 frames; spatial average pooling yields
 eight temporal tokens; TDM residualizes adjacent-token motion; an MLP predicts blink or non-blink,
 optionally preceded by a two-layer temporal Transformer. The main model of the paper omits the temporal
 Transformer.*
-
-## Results
-
-### Comparison with published methods on HUST-LEBW
-
-| Method | Input | Precision | Recall | F1 |
-|---|---|---|---|---|
-| EAR (Soukupova & Cech, 2016) | landmarks | 0.612 | 0.331 | 0.430 |
-| LRCN (Li et al., 2018) | eye sequence | 0.697 | 0.899 | 0.785 |
-| HUST-LSTM (Hu et al., 2019) | tracked eyes | 0.758 | 0.807 | 0.782 |
-| 3D-PBNN\* (Bekhouche et al., 2022) | eye sequence | 0.784 | 0.861 | 0.820 |
-| BlinkFormer (Liu et al., 2023) | face / eye | 0.821 | 0.867 | 0.843 |
-| VideoMAE (this work) | 32 × 32 crop | 0.786 | 0.875 | 0.828 |
-| BlinkVideoMAE (this work) | 32 × 32 crop | 0.833 | 0.863 | 0.848 |
-
-The first five rows are taken from Table 2 of the BlinkFormer paper, which reimplements EAR, LRCN,
-HUST-LSTM and 3D-PBNN under a common evaluation. The asterisk marks a third-party reimplementation of
-3D-PBNN (its authors report left/right-eye F1 of 0.794/0.797 in their own paper). Inputs differ
-(landmarks or tracked faces versus 32 × 32 crops), so the last two rows are not a strict ranking against
-the first five.
-
-### Ablation and cross-dataset comparison
-
-All models are trained only on HUST-LBEW and evaluated in-domain (HUST-LBEW test split) and cross-dataset
-(Epan-EyeBlink2, no target labels). Bold marks the best value per column among the first five rows. The last
-column is the experiment that reproduces the row (see
-[Reproducing the experiments](#reproducing-the-experiments)).
-
-| Model | HUST Acc. | HUST F1 | Epan Acc. | Epan F1 | `--exp` key |
-|---|---|---|---|---|---|
-| VideoMAE (baseline) | 0.7973 | 0.8282 | 0.5870 | 0.4571 | `videomae_baseline` |
-| BlinkVideoMAE (TDM only, main model) | 0.8266 | 0.8475 | **0.6739** | **0.5946** | `ablate_temporal` |
-| BlinkVideoMAE (Enc. only, no TDM) | **0.8649** | **0.8800** | 0.6667 | 0.5106 | `ablate_tdm` |
-| BlinkVideoMAE (TDM + Enc.) | 0.7950 | 0.8147 | 0.6377 | 0.4792 | `blinkvideomae` |
-| R3D-18 | 0.7477 | 0.7742 | 0.5797 | 0.4528 | `r3d18_baseline` |
-| BlinkVideoMAE-10 (TDM only)† | 0.8442 | 0.8595 | 0.6053 | 0.3182 | `blinkvideomae_span10_tdm` |
-| TDM + Enc., 10-frame span† | — | — | — | — | `blinkvideomae_span10` |
-
-† Native 10-frame span (HUST N = 443, Epan N = 152). TDM + Enc. on this span collapsed to predicting every
-clip as a blink.
-
-TDM alone gives the best cross-dataset scores. The encoder-only variant fits HUST best but transfers worse,
-and combining TDM with the encoder underperforms either alone.
 
 ## Repository layout
 
 ```
 BlinkVideoMAE/
 ├── assets/
-│   └── blinkvideomae_architecture.png   # Fig. 3 of the paper
+│   └── blinkvideomae_architecture.png
 ├── datasets/                            # downloaded separately; see datasets/README.md
 │   ├── README.md
 │   ├── HUST-LBEW/
 │   └── Epan-EyeBlink2/
 ├── src/
-│   ├── video_utils.py                   # data loading, preprocessing, metrics, Trainer helpers
-│   ├── blink_model.py                   # BlinkVideoMAE, R3D-18 baseline, build_model()
-│   ├── run_experiments.py               # experiment grid behind the paper's Tables 4-9
-│   ├── run_videomae_baseline.py         # standalone VideoMAE baseline
-│   ├── run_blinkvideomae_tdm_enc.py     # standalone TDM + temporal-Transformer model
-│   └── outputs/                         # generated at run time (git-ignored)
+│   ├── video_utils.py
+│   ├── blink_model.py
+│   ├── run_experiments.py
+│   ├── run_videomae_baseline.py
+│   ├── run_blinkvideomae_tdm_enc.py
+│   └── outputs/
 ├── .gitignore
 └── README.md
 ```
@@ -92,10 +49,8 @@ the scripts import their sibling modules by name.
 **Environment.** Install PyTorch and torchvision for your platform, then:
 
 ```bash
-pip install transformers accelerate datasets numpy pandas scikit-learn pillow av
+pip install transformers accelerate datasets numpy pandas scikit-learn pillow av opencv-python decord
 ```
-
-`decord` is optional (decoding fallback only).
 
 **Data.** Both datasets are hosted on the Hugging Face Hub:
 [`Bekhouche/HUST-LBEW`](https://huggingface.co/datasets/Bekhouche/HUST-LBEW) (training and in-domain test
@@ -121,11 +76,22 @@ python src/run_videomae_baseline.py                                      # stand
 python src/run_blinkvideomae_tdm_enc.py                                  # standalone TDM + Transformer model
 ```
 
-The `--exp` keys are those of the results table above. Note that `blinkvideomae` is the TDM + Enc. variant,
-whereas the paper's main model (TDM only) is `ablate_temporal`. `run_videomae_baseline.py` and
-`run_blinkvideomae_tdm_enc.py` are standalone versions of `videomae_baseline` and `blinkvideomae`.
+`--exp` accepts any of the seven keys below:
 
-Every run uses seed 42 (`set_seed(42)` and `TrainingArguments(seed=42)`). Results are written under
+| `--exp` key | Architecture |
+|---|---|
+| `videomae_baseline` | VideoMAE with a freshly initialized classification head; no TDM, no added temporal Transformer |
+| `ablate_temporal` | VideoMAE + TDM; no added temporal Transformer |
+| `ablate_tdm` | VideoMAE + two-layer temporal Transformer; no TDM |
+| `blinkvideomae` | VideoMAE + TDM + two-layer temporal Transformer |
+| `r3d18_baseline` | Kinetics-pretrained 3D ResNet-18 |
+| `blinkvideomae_span10_tdm` | VideoMAE + TDM, no added temporal Transformer; native 10-frame clip span |
+| `blinkvideomae_span10` | VideoMAE + TDM + two-layer temporal Transformer; native 10-frame clip span |
+
+`run_videomae_baseline.py` and `run_blinkvideomae_tdm_enc.py` are standalone versions of
+`videomae_baseline` and `blinkvideomae`.
+
+Every run uses seed 42 (`set_seed(42)` and `TrainingArguments(seed=42)`). Output is written under
 `src/outputs/`:
 
 | Script | Output folder | Files |
