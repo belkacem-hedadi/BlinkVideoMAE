@@ -2,7 +2,7 @@
 
 <p align="center"> <strong>BlinkVideoMAE: Token-Level Temporal Difference Modeling for In-the-Wild Eye Blink Detection</strong> </p>
 <p align="center"> <strong>Abdelhakim Chergui</strong> · <strong>Belkacem Hedadi</strong> · <strong>Salah Eddine Bekhouche</strong> · <strong>Azeddine Benlamoudi</strong> </p>
-<p align="center"> <em>Manuscript under submission.</em> </p>
+<p align="center"> <em>Manuscript under review.</em> </p>
 
 BlinkVideoMAE fine-tunes a Kinetics-pretrained VideoMAE-Base backbone end-to-end and adds a compact
 **Temporal Difference Module (TDM)**. TDM projects the residual between adjacent, spatially pooled
